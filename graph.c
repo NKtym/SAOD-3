@@ -1,7 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
 
 #include "graph.h"
 #include "queue.h"
+#include "minheap.h"
 
 struct graph *graph_create(int nvertices)
 {
@@ -11,36 +14,39 @@ struct graph *graph_create(int nvertices)
     g->m = malloc(sizeof(int) * nvertices * nvertices);
     g->visited = malloc(sizeof(int) * nvertices);
     graph_clear(g); 
+    g->D = (int *)calloc(nvertices + 1, sizeof(int));
+    g->H = (int *)calloc(nvertices + 1, sizeof(int));
+    g->prev = (int *)calloc(nvertices + 1, sizeof(int));
     return g;
 }
 
 void graph_clear(struct graph *g)
 {
-    int i, j;
-    for (i = 0; i < g->nvertices; i++) {
-    	g->visited[i] = 0;
-    	for (j = 0; j < g->nvertices; j++) {
-            g->m[i * g->nvertices + j] = 0;
-    	}
-    }
+    g->m = (int **)malloc(g->nvertices * sizeof(int *));
+    for (int i = 0; i < g->nvertices; i++) {
+    	g->m[i] = (int *)calloc(g->nvertices, sizeof(int));
+  }
 }
 
 void graph_free(struct graph *g)
 {
     free(g->m);
     free(g->visited);
+    free(g->D);
+    free(g->H);
+    free(g->prev);
     free(g);
 }
 
 void graph_set_edge(struct graph *g, int i, int j, int w)
 {
-    g->m[(i - 1) * g->nvertices + j - 1] = w;
-    g->m[(j - 1) * g->nvertices + i - 1] = w;
+    g->m[i][j] = g->m[j][i] = w;
+    g->m[0][g->nvertices - 1] = g->m[g->nvertices - 1][0] = w;
 }
 
 int graph_get_edge(struct graph *g, int i, int j)
 {
-    return g->m[(i - 1) * g->nvertices + j - 1];
+    return g->m[j][i];
 }
 
 void graph_dfs(struct graph *g, int v)
@@ -76,3 +82,40 @@ void graph_bfs(struct graph *g, int v)
     }
     queue_free(q);
 }
+
+void Dijekstra(struct graph *graph, int src) {
+  struct heap *Q = heap_create(20 > 100*100? 20 : 100*100);
+  graph->H[src] = src;
+  graph->D[src] = 0;
+  graph->prev[src] = -1;
+  heap_insert(Q, graph->D[src], src);
+  for (int i = 1; i < graph->nvertices + 1; i++) {
+    if (i != src) {
+      graph->H[i] = 0;
+      graph->D[i] = INT_MAX;
+      graph->prev[i] = -1;
+      heap_insert(Q, graph->D[i], i);
+    }
+  }
+  for (int i = 1; i < graph->nvertices + 1; i++) {
+    // for (int ii = 1; ii <= Q->nnodes; ii++) {
+    // printf("{%d, %d} ", h->nodes[ii].key, h->nodes[ii].value);
+    //}
+    struct heapnode v = heap_extract_min(Q);
+    // printf(" -> {%d, %d}", v.key, v.value);
+    // printf("\n");
+    int vertex = v.value;
+    graph->H[vertex] = vertex;
+
+    for (int j = 1; j < graph->nvertices + 1; j++) {
+      if (graph->m[vertex - 1][j - 1] && !graph->H[j]) {
+        if (graph->D[vertex] + graph->m[vertex - 1][j - 1] < graph->D[j]) {
+          graph->D[j] = graph->D[vertex] + graph->m[vertex - 1][j - 1];
+          heap_decrease_key(Q, j, graph->D[j]);
+          graph->prev[j] = vertex;
+        }
+      }
+    }
+  }
+}
+
