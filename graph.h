@@ -16,4 +16,4 @@ void graph_free(struct graph *g);
 void graph_set_edge(struct graph *g, int i, int j, int w);
 void graph_dfs(struct graph *g, int v);
 void graph_bfs(struct graph *g, int v);
-void Dijekstra(struct graph *graph, int src);
+void Dijekstra(struct graph *graph, int src, int size);

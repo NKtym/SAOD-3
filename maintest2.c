@@ -26,7 +26,7 @@ int main()
     	}
     }
     double t = wtime();
-    Dijekstra(g, src);
+    Dijekstra(g, src, 9);
     printf("time = %.10lf \n",wtime()-t);
     printf("Graph | vertex: %d\n", g->nvertices);
     for(int i=0;i<9;i++){

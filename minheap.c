@@ -75,8 +75,7 @@ int heap_insert(struct heap *h, int key, int value) {
   h->nodes[h->nnodes].value = value;
 
   /* HeapifyUp */
-  for (int i = h->nnodes; i > 1 && h->nodes[i].key < h->nodes[i / 2].key;
-       i = i / 2)
+  for (int i = h->nnodes; i > 1 && h->nodes[i].key < h->nodes[i / 2].key;i = i / 2)
     heap_swap(&h->nodes[i], &h->nodes[i / 2]);
   return 0;
 }
@@ -100,15 +99,11 @@ void heap_heapify(struct heap *h, int index) {
 
 // Функция для извлечения минимального элемента из бинарной кучи
 struct heapnode heap_extract_min(struct heap *h) {
-  struct heapnode minnode = {
-      0, 0}; // Изначально возвращаемый элемент с ключом и значением 0
-
+  struct heapnode minnode = {0, 0}; // Изначально возвращаемый элемент с ключом и значением 0
   if (h->nnodes == 0)
     return minnode;
-
   minnode = h->nodes[1]; // Минимальный элемент находится в корне кучи
-  h->nodes[1] =
-      h->nodes[h->nnodes--]; // Заменяем корневой элемент последним элементом
+  h->nodes[1] = h->nodes[h->nnodes--]; // Заменяем корневой элемент последним элементом
   heap_heapify(h, 1); // Восстанавливаем свойство мин-кучи начиная с корня
 
   return minnode;

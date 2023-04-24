@@ -83,36 +83,30 @@ void graph_bfs(struct graph *g, int v)
     queue_free(q);
 }
 
-void Dijekstra(struct graph *graph, int src) {
-  struct heap *Q = heap_create(20 > 100*100? 20 : 100*100);
-  graph->H[src] = src;
-  graph->D[src] = 0;
-  graph->prev[src] = -1;
-  heap_insert(Q, graph->D[src], src);
-  for (int i = 1; i < graph->nvertices + 1; i++) {
+void Dijekstra(struct graph *g, int src, int size) {
+  struct heap *Q = heap_create(size);//?
+  g->H[src] = src;
+  g->D[src] = 0;
+  g->prev[src] = -1;
+  heap_insert(Q, g->D[src], src);
+  for (int i = 1; i < g->nvertices + 1; i++) {
     if (i != src) {
-      graph->H[i] = 0;
-      graph->D[i] = INT_MAX;
-      graph->prev[i] = -1;
-      heap_insert(Q, graph->D[i], i);
+      g->H[i] = 0;
+      g->D[i] = INT_MAX;
+      g->prev[i] = -1;
+      heap_insert(Q, g->D[i], i);
     }
   }
-  for (int i = 1; i < graph->nvertices + 1; i++) {
-    // for (int ii = 1; ii <= Q->nnodes; ii++) {
-    // printf("{%d, %d} ", h->nodes[ii].key, h->nodes[ii].value);
-    //}
+  for (int i = 1; i < g->nvertices + 1; i++) {
     struct heapnode v = heap_extract_min(Q);
-    // printf(" -> {%d, %d}", v.key, v.value);
-    // printf("\n");
     int vertex = v.value;
-    graph->H[vertex] = vertex;
-
-    for (int j = 1; j < graph->nvertices + 1; j++) {
-      if (graph->m[vertex - 1][j - 1] && !graph->H[j]) {
-        if (graph->D[vertex] + graph->m[vertex - 1][j - 1] < graph->D[j]) {
-          graph->D[j] = graph->D[vertex] + graph->m[vertex - 1][j - 1];
-          heap_decrease_key(Q, j, graph->D[j]);
-          graph->prev[j] = vertex;
+    g->H[vertex] = vertex;
+    for (int j = 1; j < g->nvertices + 1; j++) {
+      if (g->m[vertex - 1][j - 1] && !g->H[j]) {
+        if (g->D[vertex] + g->m[vertex - 1][j - 1] < g->D[j]) {
+          g->D[j] = g->D[vertex] + g->m[vertex - 1][j - 1];
+          heap_decrease_key(Q, j, g->D[j]);
+          g->prev[j] = vertex;
         }
       }
     }
