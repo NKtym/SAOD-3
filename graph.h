@@ -5,7 +5,7 @@ struct graph
     int nvertices; 
     int **m; 
     int *visited;
-    int *D;        /*/   кратчайшие пути     /*/
+    int *D;
     int *H;
     int *prev; 
 };

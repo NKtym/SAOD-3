@@ -1,26 +1,15 @@
-#include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+
+#include "minheap.h"
 
 double wtime() {
   struct timeval t;
   gettimeofday(&t, NULL);
   return (double)t.tv_sec + (double)t.tv_usec * 1E-6;
 }
-
-typedef struct heapnode {
-  int key;   /* Приоритет (ключ) */
-  int value; /* Значение */
-} heapnode;
-
-typedef struct heap {
-  int maxsize;            /* Максимальный размер кучи */
-  int nnodes;             /* Число элементов */
-  struct heapnode *nodes; /* Массив элементов. Для удобства реализации элементы
-                             нумеруются с 1 */
-} heap;
 // Функция создания пустой бинарной кучи с указанной начальной вместимостью
 struct heap *heap_create(int maxsize) {
   struct heap *h;
@@ -28,8 +17,7 @@ struct heap *heap_create(int maxsize) {
   if (h != NULL) {
     h->maxsize = maxsize;
     h->nnodes = 0;
-    h->nodes = (heapnode *)malloc(
-        sizeof(*h->nodes) * (maxsize + 1)); /* Последний индекс - maxsize */
+    h->nodes = (heapnode *)malloc(sizeof(*h->nodes) * (maxsize + 1)); /* Последний индекс - maxsize */
     if (h->nodes == NULL) {
       free(h);
       return NULL;

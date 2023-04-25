@@ -41,7 +41,6 @@ void graph_free(struct graph *g)
 void graph_set_edge(struct graph *g, int i, int j, int w)
 {
     g->m[i][j] = g->m[j][i] = w;
-    g->m[0][g->nvertices - 1] = g->m[g->nvertices - 1][0] = w;
 }
 
 int graph_get_edge(struct graph *g, int i, int j)
@@ -84,7 +83,7 @@ void graph_bfs(struct graph *g, int v)
 }
 
 void Dijekstra(struct graph *g, int src, int size) {
-  struct heap *Q = heap_create(size);//?
+  struct heap *Q = heap_create(size);
   g->H[src] = src;
   g->D[src] = 0;
   g->prev[src] = -1;
