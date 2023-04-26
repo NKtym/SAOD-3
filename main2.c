@@ -9,6 +9,7 @@ int main()
 {
     int src = 1;
     struct graph *g;
+    struct heap *Q = heap_create(10000);
     g = graph_create(10000);
     for (int i = 0; i < sqrt(g->nvertices); i++) {
     	for (int j = 0; j < sqrt(g->nvertices); j++) {
@@ -24,17 +25,17 @@ int main()
     	}
     }
     double t = wtime();
-    Dijekstra(g, src,10000);
+    Dijekstra(g, Q, src,10000);
     printf("time = %.10lf \n",wtime()-t);
     printf("Graph | vertex: %d\n", g->nvertices);
     printf("D:");
     for (int i = 0; i < g->nvertices && i < 10000; i++) {
-    	printf("%2.1d ", g->D[i + 1]);
+    	printf("%2.1d ", Q->D[i + 1]);
     }
     printf("\n");
     printf("prev:");
     for (int i = 0; i < g->nvertices && i < 10000; i++) {
-    	printf("%2.1d ", g->prev[i + 1]);
+    	printf("%2.1d ", Q->prev[i + 1]);
     }
     printf("\n");
     graph_free(g);

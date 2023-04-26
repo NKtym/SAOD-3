@@ -10,6 +10,9 @@ typedef struct heap {
   int nnodes;             /* Число элементов */
   struct heapnode *nodes; /* Массив элементов. Для удобства реализации элементы
                              нумеруются с 1 */
+  int *D;
+  int *H;
+  int *prev; 
 } heap;
 
 struct heap *heap_create(int maxsize);

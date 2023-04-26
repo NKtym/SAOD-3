@@ -8,6 +8,7 @@ int main()
 {
     int src = 1;
     struct graph *g;
+    struct heap *Q = heap_create(5);
     g = graph_create(5);
     graph_set_edge(g, 0, 1, 10);
     graph_set_edge(g, 0, 4, 100);
@@ -21,7 +22,7 @@ int main()
     printf("BFS:\n");
     graph_bfs(g, 2);
     double t = wtime();
-    Dijekstra(g, src, 5);
+    Dijekstra(g, Q, src, 5);
     printf("time = %.10lf \n",wtime()-t);
     printf("Graph | vertex: %d\n", g->nvertices);
     printf("\n");
@@ -33,12 +34,12 @@ int main()
     printf("\n");
     printf("D:");
     for (int i = 0; i < g->nvertices && i < 5; i++) {
-    	printf("%2.1d ", g->D[i + 1]);
+    	printf("%2.1d ", Q->D[i + 1]);
     }
     printf("\n");
     printf("prev:");
     for (int i = 0; i < g->nvertices && i < 5; i++) {
-    	printf("%2.1d ", g->prev[i + 1]);
+    	printf("%2.1d ", Q->prev[i + 1]);
     }
     printf("\n");
     graph_free(g);

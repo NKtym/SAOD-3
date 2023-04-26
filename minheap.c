@@ -18,6 +18,9 @@ struct heap *heap_create(int maxsize) {
     h->maxsize = maxsize;
     h->nnodes = 0;
     h->nodes = (heapnode *)malloc(sizeof(*h->nodes) * (maxsize + 1)); /* Последний индекс - maxsize */
+    h->D = (int *)calloc(maxsize + 1, sizeof(int));
+    h->H = (int *)calloc(maxsize + 1, sizeof(int));
+    h->prev = (int *)calloc(maxsize + 1, sizeof(int));
     if (h->nodes == NULL) {
       free(h);
       return NULL;
@@ -28,6 +31,9 @@ struct heap *heap_create(int maxsize) {
 
 void heap_free(struct heap *h) {
   free(h->nodes);
+  free(h->D);
+  free(h->H);
+  free(h->prev);
   free(h);
 }
 

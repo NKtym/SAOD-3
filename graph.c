@@ -14,9 +14,6 @@ struct graph *graph_create(int nvertices)
     g->m = malloc(sizeof(int) * nvertices * nvertices);
     g->visited = malloc(sizeof(int) * nvertices);
     graph_clear(g); 
-    g->D = (int *)calloc(nvertices + 1, sizeof(int));
-    g->H = (int *)calloc(nvertices + 1, sizeof(int));
-    g->prev = (int *)calloc(nvertices + 1, sizeof(int));
     return g;
 }
 
@@ -32,9 +29,6 @@ void graph_free(struct graph *g)
 {
     free(g->m);
     free(g->visited);
-    free(g->D);
-    free(g->H);
-    free(g->prev);
     free(g);
 }
 
@@ -82,30 +76,29 @@ void graph_bfs(struct graph *g, int v)
     queue_free(q);
 }
 
-void Dijekstra(struct graph *g, int src, int size) {
-  struct heap *Q = heap_create(size);
-  g->H[src] = src;
-  g->D[src] = 0;
-  g->prev[src] = -1;
-  heap_insert(Q, g->D[src], src);
+void Dijekstra(struct graph *g, struct heap *Q, int src, int size) {
+  Q->H[src] = src;
+  Q->D[src] = 0;
+  Q->prev[src] = -1;
+  heap_insert(Q, Q->D[src], src);
   for (int i = 1; i < g->nvertices + 1; i++) {
     if (i != src) {
-      g->H[i] = 0;
-      g->D[i] = INT_MAX;
-      g->prev[i] = -1;
-      heap_insert(Q, g->D[i], i);
+      Q->H[i] = 0;
+      Q->D[i] = INT_MAX;
+      Q->prev[i] = -1;
+      heap_insert(Q, Q->D[i], i);
     }
   }
   for (int i = 1; i < g->nvertices + 1; i++) {
     struct heapnode v = heap_extract_min(Q);
     int vertex = v.value;
-    g->H[vertex] = vertex;
+    Q->H[vertex] = vertex;
     for (int j = 1; j < g->nvertices + 1; j++) {
-      if (g->m[vertex - 1][j - 1] && !g->H[j]) {
-        if (g->D[vertex] + g->m[vertex - 1][j - 1] < g->D[j]) {
-          g->D[j] = g->D[vertex] + g->m[vertex - 1][j - 1];
-          heap_decrease_key(Q, j, g->D[j]);
-          g->prev[j] = vertex;
+      if (g->m[vertex - 1][j - 1] && !Q->H[j]) {
+        if (Q->D[vertex] + g->m[vertex - 1][j - 1] < Q->D[j]) {
+          Q->D[j] = Q->D[vertex] + g->m[vertex - 1][j - 1];
+          heap_decrease_key(Q, j, Q->D[j]);
+          Q->prev[j] = vertex;
         }
       }
     }
