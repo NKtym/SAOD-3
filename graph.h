@@ -15,3 +15,4 @@ void graph_set_edge(struct graph *g, int i, int j, int w);
 void graph_dfs(struct graph *g, int v);
 void graph_bfs(struct graph *g, int v);
 void Dijekstra(struct graph *g, struct heap *Q, int src, int size);
+void Search_shortest_path(struct heap *Q, struct graph *g, int src, int dst);

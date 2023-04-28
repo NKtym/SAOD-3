@@ -105,3 +105,27 @@ void Dijekstra(struct graph *g, struct heap *Q, int src, int size) {
   }
 }
 
+void Search_shortest_path(struct heap *Q, struct graph *g, int src, int dst)
+{
+    int i = dst;
+    int pathlen = 1;
+    while (i != src)
+    {
+        pathlen++;
+        i = Q->prev[i];
+    }
+    int j = 0;
+    i = dst;
+    int path[g->nvertices];
+    while (i != src)
+    {
+        path[pathlen - j] = i;
+        i = Q->prev[i];
+        j++;
+    }
+     for (int i = 2; i < pathlen + 1; i++)
+    {
+        printf("%d ", path[i]);
+    }
+    printf("\n");
+}

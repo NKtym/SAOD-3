@@ -39,10 +39,13 @@ int main()
     	printf("%2.1d ", Q->D[i + 1]);
     }
     printf("\n");
-    printf("prev:");
+/*    printf("prev:");
     for (int i = 0; i < g->nvertices && i < 9; i++) {
     	printf("%2.1d ", Q->prev[i + 1]);
     }
+*/
+    printf("path:");
+    Search_shortest_path(Q,g,src,9);
     printf("\n");
     graph_free(g);
     return 0;
